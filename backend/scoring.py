@@ -23,10 +23,13 @@ def calculate_scores(stats: dict):
         # weights: 30% commits, 50% lines, 20% files
         impact_score = (commit_ratio * 0.3 + lines_ratio * 0.5 + files_ratio * 0.2) * 100
         
+        quality_score = s.get("avg_quality", 100.0)
+        
         scored_authors.append({
             "author": author,
             "stats": s,
             "score": round(impact_score, 2),
+            "quality_score": round(quality_score, 2),
             "commit_ratio": commit_ratio,
             "lines_ratio": lines_ratio
         })

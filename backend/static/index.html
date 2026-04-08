@@ -12,13 +12,14 @@
             theme: {
                 extend: {
                     colors: {
-                        darkBg: '#0b0f19',
-                        panelBg: '#13192b',
-                        accent: '#3b82f6',
-                        accentHover: '#2563eb',
+                        darkBg: '#0f172a', /* slate-900 */
+                        panelBg: '#1e293b', /* slate-800 */
+                        accent: '#475569', /* slate-600 */
+                        accentHover: '#334155', /* slate-700 */
                         danger: '#ef4444',
                         warning: '#f59e0b',
-                        success: '#10b981'
+                        success: '#10b981',
+                        matteText: '#cbd5e1'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -41,24 +42,22 @@
     
     <style>
         body {
-            background-color: #0b0f19;
-            color: #f3f4f6;
+            background-color: #0f172a;
+            color: #cbd5e1;
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
         }
         
-        .glass-panel {
-            background: rgba(19, 25, 43, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        .solid-panel {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .glow-input:focus {
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-            border-color: rgba(59, 130, 246, 0.5);
+        .matte-input:focus {
+            border-color: #64748b;
             outline: none;
         }
 
@@ -68,7 +67,7 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border-left-color: #3b82f6;
+            border-left-color: #cbd5e1;
             animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -78,6 +77,12 @@
             animation: fadeIn 0.5s ease-out forwards;
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
 <body>
@@ -86,13 +91,11 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // Custom Component for Icons since lucide-react is hard to use via CDN without bundler
         const Icon = ({ name, size = 24, className = "" }) => {
             const iconRef = useRef(null);
             
             useEffect(() => {
                 if (iconRef.current && window.lucide) {
-                    // Clear existing
                     iconRef.current.innerHTML = "";
                     const iconElement = document.createElement("i");
                     iconElement.setAttribute("data-lucide", name);
@@ -112,7 +115,7 @@
         }
 
         function Landing({ onAnalyze }) {
-            const [url, setUrl] = useState("https://github.com/manas/test-repo"); // Example
+            const [url, setUrl] = useState("https://github.com/manas/test-repo");
             const [loading, setLoading] = useState(false);
 
             const handleSubmit = (e) => {
@@ -123,24 +126,20 @@
             }
 
             return (
-                <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
-                    {/* Background decoration */}
-                    <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-accent opacity-10 blur-[120px]"></div>
-                    <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-accent opacity-10 blur-[120px]"></div>
-                    
+                <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-slate-900">
                     <div className="max-w-xl w-full z-10 fade-in">
                         <div className="text-center mb-10">
-                            <h1 className="text-5xl font-bold mb-4 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">GitSight</h1>
-                            <p className="text-gray-400 text-lg">AI-Assisted Contribution Analyzer</p>
-                            <p className="text-sm text-gray-500 mt-2">Uncover the true developers behind collaborative projects.</p>
+                            <h1 className="text-5xl font-bold mb-4 tracking-tight text-slate-100">GitSight</h1>
+                            <p className="text-slate-400 text-lg">AI-Assisted Contribution Analyzer</p>
+                            <p className="text-sm text-slate-500 mt-2">Uncover the true developers behind collaborative projects.</p>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="glass-panel p-8 rounded-2xl">
+                        <form onSubmit={handleSubmit} className="solid-panel p-8 rounded-2xl">
                             <div className="mb-6">
-                                <label className="block text-sm font-medium text-gray-400 mb-2">Repository URL</label>
+                                <label className="block text-sm font-medium text-slate-400 mb-2">Repository URL</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                        <Icon name="github" size={18} className="text-gray-500" />
+                                        <Icon name="github" size={18} className="text-slate-500" />
                                     </div>
                                     <input 
                                         type="url" 
@@ -148,7 +147,7 @@
                                         value={url}
                                         onChange={(e) => setUrl(e.target.value)}
                                         placeholder="https://github.com/owner/repo"
-                                        className="w-full bg-black/40 border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white glow-input transition-all"
+                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg py-3 pl-10 pr-4 text-slate-100 matte-input transition-all"
                                     />
                                 </div>
                             </div>
@@ -156,7 +155,7 @@
                             <button 
                                 type="submit" 
                                 disabled={loading}
-                                className="w-full bg-accent hover:bg-accentHover text-white font-medium py-3 px-4 rounded-lg transition-all flex items-center justify-center space-x-2 shadow-lg shadow-accent/20"
+                                className="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium py-3 px-4 rounded-lg transition-all flex items-center justify-center space-x-2"
                             >
                                 {loading ? <div className="spinner"></div> : (
                                     <>
@@ -171,24 +170,170 @@
             )
         }
 
+        function UserRow({ author, onToggle, isExpanded, timeline }) {
+            const [imgError, setImgError] = useState(false);
+
+            const getRoleStyles = (role) => {
+                if (role.includes("Major")) return "bg-emerald-900/40 text-emerald-400 border-emerald-800/50";
+                if (role.includes("Free")) return "bg-rose-900/40 text-rose-400 border-rose-800/50";
+                return "bg-amber-900/40 text-amber-400 border-amber-800/50";
+            }
+
+            const getQualityColor = (q) => {
+                if (q >= 80) return "text-emerald-400";
+                if (q >= 50) return "text-amber-400";
+                return "text-rose-400";
+            }
+
+            // Get this user's commits from timeline
+            const userCommits = timeline.filter(c => c.author === author.author);
+
+            return (
+                <div className="bg-slate-800/50 border border-slate-700 rounded-lg overflow-hidden transition-colors">
+                    <div className="p-4 flex flex-col sm:flex-row justify-between sm:items-center hover:bg-slate-700/30 cursor-pointer" onClick={onToggle}>
+                        <div className="flex items-center mb-3 sm:mb-0">
+                            <div className="w-12 h-12 relative mr-4">
+                                {!imgError ? (
+                                    <img 
+                                        src={`https://github.com/${author.author}.png`} 
+                                        onError={() => setImgError(true)}
+                                        className="w-12 h-12 rounded-full border-2 border-slate-600 object-cover"
+                                        alt={author.author}
+                                    />
+                                ) : (
+                                    <div className="w-12 h-12 rounded-full bg-slate-700 border-2 border-slate-600 flex items-center justify-center">
+                                        <Icon name="user" className="text-slate-400" size={20} />
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+                                <a 
+                                    href={`https://github.com/${author.author}`} 
+                                    target="_blank" 
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="font-semibold text-lg text-slate-100 hover:text-blue-400 transition-colors inline-block"
+                                >
+                                    {author.author}
+                                </a>
+                                <div className="text-xs text-slate-400 mt-0.5 space-x-3 flex items-center">
+                                    <span className="flex items-center"><Icon name="git-commit" size={12} className="mr-1"/> {author.stats.commits}</span>
+                                    <span className="flex items-center"><Icon name="code" size={12} className="mr-1"/> {author.stats.lines_added + author.stats.lines_deleted}</span>
+                                    <span className="flex items-center"><Icon name="file" size={12} className="mr-1"/> {author.stats.files_modified}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="flex items-center space-x-6">
+                            <div className="text-right hidden md:block">
+                                <div className="text-xs font-medium text-slate-400">Code Quality</div>
+                                <div className={`text-base font-bold ${getQualityColor(author.quality_score)}`}>{author.quality_score.toFixed(1)}</div>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-xs font-medium text-slate-400">Impact Score</div>
+                                <div className="text-lg font-bold text-slate-200">{author.score}</div>
+                            </div>
+                            <div className={`px-3 py-1 rounded-full text-xs font-semibold border ${getRoleStyles(author.role)}`}>
+                                {author.role}
+                            </div>
+                            <div className="text-slate-500">
+                                <Icon name={isExpanded ? "chevron-up" : "chevron-down"} size={20} />
+                            </div>
+                        </div>
+                    </div>
+
+                    {isExpanded && (
+                        <div className="bg-slate-900 border-t border-slate-700 p-4">
+                            <h5 className="text-sm font-semibold text-slate-300 mb-2 flex items-center">
+                                <Icon name="folder" size={16} className="mr-2 text-slate-500"/>
+                                Files Modified ({author.stats.files.length})
+                            </h5>
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                {author.stats.files.slice(0, 10).map((f, i) => (
+                                    <span key={i} className="px-2 py-1 bg-slate-800 text-slate-400 text-xs rounded border border-slate-700 truncate max-w-xs" title={f}>
+                                        {f.split('/').pop()}
+                                    </span>
+                                ))}
+                                {author.stats.files.length > 10 && (
+                                    <span className="px-2 py-1 bg-slate-800 text-slate-500 text-xs rounded border border-slate-700">
+                                        +{author.stats.files.length - 10} more
+                                    </span>
+                                )}
+                            </div>
+
+                            <h5 className="text-sm font-semibold text-slate-300 mb-2 flex items-center">
+                                <Icon name="clock" size={16} className="mr-2 text-slate-500"/>
+                                Commit History
+                            </h5>
+                            <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                                {userCommits.map((c, i) => (
+                                    <div key={i} className="p-3 bg-slate-800 rounded border border-slate-700 text-sm">
+                                        <div className="flex justify-between items-start mb-1">
+                                            <span className="font-medium text-slate-200">{c.msg}</span>
+                                            <span className="text-xs text-slate-500 whitespace-nowrap ml-2">{c.date}</span>
+                                        </div>
+                                        <div className="text-xs text-slate-400 flex space-x-3 mt-2">
+                                            <span className="text-emerald-400">+{c.insertions}</span>
+                                            <span className="text-rose-400">-{c.deletions}</span>
+                                            {c.files && c.files.length > 0 && (
+                                                <span>• {c.files.length} file(s)</span>
+                                            )}
+                                        </div>
+                                        {c.files && c.files.length > 0 && (
+                                            <div className="mt-2 flex flex-wrap gap-1 text-[10px]">
+                                                {c.files.slice(0,5).map((f, idx) => (
+                                                    <span key={idx} className="bg-slate-700 text-slate-400 px-1 rounded">{f.split('/').pop()}</span>
+                                                ))}
+                                                {c.files.length > 5 && <span className="text-slate-500 ml-1">...</span>}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                                {userCommits.length === 0 && <p className="text-sm text-slate-500">No commit details available.</p>}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )
+        }
+
         function Dashboard({ data, onBack }) {
             const chartRef = useRef(null);
+            const [expandedUser, setExpandedUser] = useState(null);
             
             useEffect(() => {
                 if(!chartRef.current || !data) return;
                 
                 const ctx = chartRef.current.getContext('2d');
                 
-                // Prepare data for Chart.js
-                const labels = data.authors.map(a => a.author);
-                const scores = data.authors.map(a => a.score);
+                // Grouping < 2% commit impact into "Others" to declutter
+                const totalScore = data.authors.reduce((sum, a) => sum + a.score, 0) || 1;
+                const threshold = totalScore * 0.02; // 2% threshold
                 
+                const majors = [];
+                let othersScore = 0;
+                
+                data.authors.forEach(a => {
+                    if(a.score >= threshold) {
+                        majors.push(a);
+                    } else {
+                        othersScore += a.score;
+                    }
+                });
+
+                const labels = majors.map(a => a.author);
+                const scores = majors.map(a => a.score);
+                
+                if (othersScore > 0) {
+                    labels.push(`Others (${data.authors.length - majors.length})`);
+                    scores.push(othersScore);
+                }
+
+                // Matte specific colors
                 const colors = [
-                    'rgba(59, 130, 246, 0.8)', // blue
-                    'rgba(16, 185, 129, 0.8)', // green
-                    'rgba(245, 158, 11, 0.8)', // yellow
-                    'rgba(239, 68, 68, 0.8)',  // red
-                    'rgba(168, 85, 247, 0.8)', // purple
+                    '#475569', // slate-600
+                    '#334155', // slate-700
+                    '#64748b', // slate-500
+                    '#1e293b', // slate-800
+                    '#94a3b8', // slate-400
                 ];
 
                 const chart = new Chart(ctx, {
@@ -197,18 +342,27 @@
                         labels: labels,
                         datasets: [{
                             data: scores,
-                            backgroundColor: colors.slice(0, labels.length).concat(colors),
-                            borderWidth: 0,
+                            backgroundColor: colors.slice(0, labels.length).concat(Array(Math.max(0, labels.length - colors.length)).fill('#1e293b')),
+                            borderColor: '#0f172a',
+                            borderWidth: 2,
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        cutout: '75%',
+                        cutout: '70%',
                         plugins: {
                             legend: {
                                 position: 'right',
-                                labels: { color: '#9ca3af', font: { family: 'Inter' } }
+                                labels: { color: '#94a3b8', font: { family: 'Inter' }, padding: 20 }
+                            },
+                            tooltip: {
+                                backgroundColor: '#1e293b',
+                                titleColor: '#cbd5e1',
+                                bodyColor: '#94a3b8',
+                                borderColor: '#334155',
+                                borderWidth: 1,
+                                padding: 12
                             }
                         }
                     }
@@ -217,89 +371,61 @@
                 return () => chart.destroy();
             }, [data]);
 
-            const getRoleStyles = (role) => {
-                if (role === "Major Contributor") return "bg-success/20 text-success border-success/30";
-                if (role === "Free Rider") return "bg-danger/20 text-danger border-danger/30";
-                return "bg-warning/20 text-warning border-warning/30";
-            }
-
             return (
                 <div className="min-h-screen p-6 max-w-7xl mx-auto fade-in">
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-800">
+                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-800">
                         <div>
-                            <button onClick={onBack} className="flex items-center text-gray-400 hover:text-white transition-colors mb-2 text-sm">
+                            <button onClick={onBack} className="flex items-center text-slate-400 hover:text-slate-200 transition-colors mb-2 text-sm font-medium">
                                 <Icon name="arrow-left" size={16} className="mr-1" /> Back to Search
                             </button>
-                            <h2 className="text-2xl font-bold flex items-center">
-                                <Icon name="git-pull-request" className="mr-3 text-accent" />
+                            <h2 className="text-2xl font-bold flex items-center text-slate-100">
+                                <Icon name="git-pull-request" className="mr-3 text-slate-400" />
                                 {data.repo.split('github.com/')[1]}
                             </h2>
-                            <p className="text-gray-500 text-sm mt-1">Total Commits Analyzed: {data.total_commits}</p>
+                            <p className="text-slate-500 text-sm mt-1">Total Commits Analyzed: {data.total_commits}</p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         
                         {/* Chart Panel */}
-                        <div className="glass-panel p-6 rounded-xl flex flex-col">
-                            <h3 className="text-lg font-semibold mb-6 flex items-center text-gray-200">
-                                <Icon name="pie-chart" className="mr-2 text-gray-400" size={20} />
+                        <div className="solid-panel p-6 rounded-xl flex flex-col h-[400px]">
+                            <h3 className="text-lg font-semibold mb-2 flex items-center text-slate-200">
+                                <Icon name="pie-chart" className="mr-2 text-slate-400" size={20} />
                                 Impact Distribution
                             </h3>
-                            <div className="relative flex-grow flex items-center justify-center min-h-[250px]">
+                            <p className="text-xs text-slate-500 mb-6 border-b border-slate-700 pb-2">Minor contributors (&lt;2%) grouped as "Others"</p>
+                            <div className="relative flex-grow flex items-center justify-center">
                                 <canvas ref={chartRef}></canvas>
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                    <div className="text-center">
-                                        <div className="text-3xl font-bold">{data.authors.length}</div>
-                                        <div className="text-xs text-gray-500">Contributors</div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
                         {/* List Panel */}
-                        <div className="glass-panel p-6 rounded-xl lg:col-span-2">
-                            <h3 className="text-lg font-semibold mb-6 flex items-center text-gray-200">
-                                <Icon name="users" className="mr-2 text-gray-400" size={20} />
+                        <div className="solid-panel p-6 rounded-xl lg:col-span-2">
+                            <h3 className="text-lg font-semibold mb-6 flex items-center text-slate-200">
+                                <Icon name="users" className="mr-2 text-slate-400" size={20} />
                                 Team Members & Analysis
                             </h3>
                             <div className="space-y-4">
                                 {data.authors.map((a, i) => (
-                                    <div key={i} className="bg-black/20 border border-gray-800 rounded-lg p-4 flex flex-col sm:flex-row justify-between sm:items-center hover:border-gray-700 transition-colors">
-                                        <div className="flex items-center mb-3 sm:mb-0">
-                                            <div className="w-10 h-10 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center mr-4 shadow-inner">
-                                                <Icon name="user" className="text-gray-400" size={20} />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-lg text-white">{a.author}</h4>
-                                                <div className="text-xs text-gray-500 mt-0.5 space-x-3">
-                                                    <span>{a.stats.commits} Commits</span>
-                                                    <span>{a.stats.lines_added + a.stats.lines_deleted} Lines</span>
-                                                    <span>{a.stats.files_modified} Files</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center space-x-4">
-                                            <div className="text-right">
-                                                <div className="text-sm font-medium text-gray-300">Impact Score</div>
-                                                <div className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-200 to-gray-500">{a.score}</div>
-                                            </div>
-                                            <div className={`px-3 py-1 rounded-full text-xs font-semibold border ${getRoleStyles(a.role)}`}>
-                                                {a.role}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <UserRow 
+                                        key={i} 
+                                        author={a} 
+                                        timeline={data.timeline}
+                                        isExpanded={expandedUser === i}
+                                        onToggle={() => setExpandedUser(expandedUser === i ? null : i)}
+                                    />
                                 ))}
                             </div>
                             
                             {/* Insight Alert if free rider found */}
                             {data.authors.some(a => a.role === "Free Rider") && (
-                                <div className="mt-6 bg-danger/10 border border-danger/30 rounded-lg p-4 flex items-start">
-                                    <Icon name="alert-triangle" className="text-danger mt-0.5 mr-3 flex-shrink-0" size={20} />
+                                <div className="mt-8 bg-rose-900/10 border border-rose-900/50 rounded-lg p-4 flex items-start">
+                                    <Icon name="alert-triangle" className="text-rose-500 mt-0.5 mr-3 flex-shrink-0" size={20} />
                                     <div>
-                                        <h5 className="font-bold text-danger text-sm">Potential Imbalance Detected</h5>
-                                        <p className="text-danger/80 text-xs mt-1">One or more members have a dramatically lower impact score compared to the group average. This might indicate an uneven distribution of workload or a free-rider scenario.</p>
+                                        <h5 className="font-bold text-rose-400 text-sm">Potential Imbalance Detected</h5>
+                                        <p className="text-rose-400/80 text-xs mt-1">One or more members have a dramatically lower impact score compared to the group average. This might indicate an uneven distribution of workload or a free-rider scenario.</p>
                                     </div>
                                 </div>
                             )}
