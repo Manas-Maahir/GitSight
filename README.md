@@ -1,5 +1,7 @@
 # GitSight
 
+<img width="1280" height="591" alt="image" src="https://github.com/user-attachments/assets/50f13983-9209-4849-ba8f-3a4ac3d8f2c1" />
+
 **Understand who actually contributed — beyond raw commit counts.**
 
 GitSight analyzes any public GitHub repository’s commit history to produce a fair, multi-factor breakdown of every contributor’s impact, code quality, and integrity. Designed for educators, team leads, and open-source maintainers who need transparent, evidence-backed contribution analysis.
@@ -81,14 +83,21 @@ npm run dev
    - **Impact chart** — interactive donut showing contribution distribution
    - **Ownership vs Effort** — bar chart showing divergence (who owns vs who churned)
    - **Contributor cards** — sortable table with role, ownership%, effort, quality, integrity flags
-5. **Expand** any contributor card to see:
+<img width="1034" height="586" alt="image" src="https://github.com/user-attachments/assets/9fb92ce9-39f6-43ed-a32f-92e1e46cd667" />
+
+6. **Expand** any contributor card to see:
    - Why this verdict (confidence, caveats, regime)
    - Attribution metrics (ownership, effort, divergence, quality)
    - Integrity signals with expandable evidence chains (commit SHAs)
    - Files modified
    - Commit history timeline
    - **Instructor review** — confirm or correct the role classification
-6. **Export** as CSV for your records
+     <img width="741" height="538" alt="image" src="https://github.com/user-attachments/assets/5a481159-f128-44b0-a1ba-0ba174af6dcd" />
+
+7. **Export** as CSV for your records
+  
+<img width="1354" height="755" alt="image" src="https://github.com/user-attachments/assets/084afcad-293e-4ac3-9053-bc53a27e02d8" />
+
 
 ### Key Features on the Dashboard
 
