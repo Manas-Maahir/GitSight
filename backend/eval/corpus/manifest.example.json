@@ -1,0 +1,28 @@
+{
+  "_README": "TEMPLATE ONLY — these entries are illustrative, not validated ground truth. Replace repo_url and labels with REAL repositories annotated by a human (see README.md). Copy this file to manifest.json (gitignored) and fill it in. Do not commit real student data.",
+  "repositories": [
+    {
+      "name": "example-solo-author",
+      "repo_url": "https://github.com/owner/solo-project",
+      "notes": "Single-author repo. Defensible ground truth: the sole author is the only contributor.",
+      "roles": {
+        "Jane Doe": "Major Contributor"
+      },
+      "flags": {}
+    },
+    {
+      "name": "example-team-with-free-rider",
+      "repo_url": "https://github.com/owner/team-project",
+      "deadline": null,
+      "notes": "Replace with a real group repo. 'deadline' is optional epoch seconds; set it to sharpen deadline-spike detection.",
+      "roles": {
+        "Strong Student": "Major Contributor",
+        "Average Student": "Minor Contributor",
+        "Absent Student": "Free Rider"
+      },
+      "flags": {
+        "Absent Student": ["deadline_spike"]
+      }
+    }
+  ]
+}

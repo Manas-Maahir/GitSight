@@ -1,58 +1,177 @@
-# GitSight: GitHub Contribution Analyzer 
+# GitSight
 
-Hey there! Thanks for checking out GitSight.
+**Understand who actually contributed — beyond raw commit counts.**
 
-If you’ve ever worked on a group project, you know the struggle: trying to figure out who *actually* wrote the core logic and who just fixed three typos and called it a day. I built GitSight to solve exactly that problem. 
+GitSight analyzes any public GitHub repository’s commit history to produce a fair, multi-factor breakdown of every contributor’s impact, code quality, and integrity. Designed for educators, team leads, and open-source maintainers who need transparent, evidence-backed contribution analysis.
 
-Instead of just counting raw commits (which is pretty easy to game), GitSight digs into the actual repository history to calculate a personalized **Impact Score** and an overall **Code Quality Grade** for every team member.
-
-## What does it actually do?
-
-* **Deep Git Analysis:** Plugs into any public GitHub repository and scans the commit history.
-* **Smart Scoring System:** Uses a custom algorithm to calculate an Impact Score by weighing the amount of commits, lines added/deleted, and files modified.
-* **Code Quality Checker:** We compute serious metrics under the hood! (Cyclomatic Complexity, Maintainability Index, Comment Density, etc.) to give each author a code quality score from 0 to 100.
-* **Role Assignment:** It categorizes contributors as "Major Contributors", "Minor Contributors" or "Free Riders" based on their comparative performance. 
-* **Sleek UI:** A beautiful, dark-mode matte dashboard that breaks down the stats into intuitive charts and collapsible history views.
-
-##  Tech Stack
-
-* **Backend:** Python, FastAPI, PyDriller (for traversing git commits), Radon & Lizard (for code complexity analysis).
-* **Frontend:** HTML, Tailwind CSS (for that slick matte finish), React (via CDN for state management), and Chart.js.
-
-## 💻 How to run it locally
-
-If you want to spin this up on your own machine, it's pretty simple:
-
-1. **Clone the repo:**
-   ```bash
-   git clone <your-repo-url>
-   cd Contri/backend
-   ```
-
-2. **Set up a virtual environment (Optional but recommended):**
-   ```bash
-   python -m venv venv
-   # On Windows:
-   venv\Scripts\activate
-   # On Mac/Linux:
-   source venv/bin/activate
-   ```
-
-3. **Install the dependencies:**
-   Make sure you have FastAPI, PyDriller, Radon, and Lizard installed.
-   ```bash
-   pip install fastapi uvicorn pydriller pydantic radon lizard
-   ```
-
-4. **Start the server:**
-   ```bash
-   python main.py
-   # OR
-   uvicorn main:app --reload
-   ```
-
-5. **View the magic:**
-   Open up your browser and head to `http://127.0.0.1:8000`. Pop in a GitHub repo URL and watch it go to work!
+> **Academic Integrity Edition**: GitSight is now focused on **contribution verification and plagiarism detection** for educational contexts. It surfaces ownership confidence intervals, calibrated attribution regimes (cold-start vs trained), integrity signals (commits, diff patterns, authorship forensics), and per-contribution explanations so instructors can verify claims and spot anomalies.
 
 ---
-*Built with ❤️ (and maybe a little bit of caffeine) as a college project to catch the free riders. Feel free to use it to keep your team honest!*
+
+## Features
+
+- **Ownership Analysis** — per-author contribution ownership with 90% confidence intervals (not false precision)
+- **Role Classification** — Major Contributor, Minor Contributor, or Free Rider based on impact and effort
+- **Code Quality Assessment** — per-author average of cyclomatic complexity, maintainability index, comment density, and readability
+- **Integrity Forensics** — detects suspicious patterns (mass deletions, unusual commit timing, same-day bulk commits)
+- **Calibrated Confidence** — shows whether the system is cold-start (trained on no feedback) or calibrated (trained on instructor reviews)
+- **Real-Time Progress** — transparent staged pipeline showing live analysis progress (cloning, parsing history, attribution, quality scoring, etc.)
+- **Interactive Dashboard** — linked charts and tables, sortable contributor cards with progressive disclosure, expandable evidence chains
+- **Author Deduplication** — merges the same person’s commits across different git display names using email identity
+
+---
+
+## Quick Start
+
+### Run from Docker (recommended)
+
+```bash
+docker compose up
+# Opens http://127.0.0.1:8000
+```
+
+### Run locally (development)
+
+**Backend:**
+```bash
+cd backend
+
+# 1. Create a virtual environment
+python -m venv venv
+# Windows:
+venv\Scripts\activate
+# macOS / Linux:
+source venv/bin/activate
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Start the server
+python main.py
+# Server listens on http://127.0.0.1:8000
+```
+
+**Frontend (optional, for local development):**
+```bash
+cd frontend
+npm install
+npm run dev
+# Dev server on http://127.0.0.1:5173 (proxies /api to backend on :8000)
+# Production bundle already built into backend/static/
+```
+
+---
+
+## How to Use
+
+1. **Open** http://127.0.0.1:8000 in your browser
+2. **Paste** a public GitHub repository URL (e.g., `https://github.com/pallets/flask`)
+3. **Analyze** — click "Analyse" and watch the live **staged pipeline**:
+   - ✓ Cloning repository
+   - ⟳ Parsing git history (shows commits parsed, progress %)
+   - → Attribution analysis
+   - → Code quality
+   - → Ownership modeling
+   - → Integrity forensics
+   - → Scoring contributions
+   - → Generating explanations
+4. **Review** the dashboard:
+   - **Summary header** — repo stats, reliability band, at-a-glance verdict
+   - **Trust banner** — reliability factors + calibration regime (cold-start vs calibrated)
+   - **Impact chart** — interactive donut showing contribution distribution
+   - **Ownership vs Effort** — bar chart showing divergence (who owns vs who churned)
+   - **Contributor cards** — sortable table with role, ownership%, effort, quality, integrity flags
+5. **Expand** any contributor card to see:
+   - Why this verdict (confidence, caveats, regime)
+   - Attribution metrics (ownership, effort, divergence, quality)
+   - Integrity signals with expandable evidence chains (commit SHAs)
+   - Files modified
+   - Commit history timeline
+   - **Instructor review** — confirm or correct the role classification
+6. **Export** as CSV for your records
+
+### Key Features on the Dashboard
+
+- **Theme toggle** — light/dark/system preference (top right)
+- **Sortable columns** — click column headers to sort by Impact, Ownership, Effort, Quality, or Integrity Flags
+- **Chart linking** — hover a slice in the Impact chart to highlight the corresponding row
+- **Confidence intervals** — ownership is shown as a range (e.g. "~67% (40–86%)") — the interval shows uncertainty
+- **Calibration regime** — indicates whether confidence bounds are cold-start (untrained) or calibrated (trained on instructor feedback)
+- **Integrity evidence** — click "Integrity signals" to expand commit-level evidence; all signals are **advisory** and do not change the role score
+- **Instructor review** — select the correct role if the system got it wrong; this trains the confidence model
+
+---
+
+## Configuration
+
+Copy `.env.example` to `.env` and adjust as needed:
+
+```bash
+cp .env.example .env
+```
+
+| Variable | Default | Description |
+|---|---|---|
+| `GITSIGHT_HOST` | `127.0.0.1` | Server bind address |
+| `GITSIGHT_PORT` | `8000` | Server port |
+| `GITSIGHT_CLONE_DIR` | `backend/.cache/repo_clones` | Temporary clone directory |
+| `GITSIGHT_ALLOWED_ORIGINS` | `*` | Comma-separated CORS origins (set explicitly in production) |
+| `GITSIGHT_CACHE_ENABLED` | `true` | Cache analysis results by (repo, HEAD sha) |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | Python 3.11+, FastAPI, Uvicorn |
+| **Analysis** | PyDriller (git), Radon (complexity), Lizard (metrics) |
+| **Confidence** | TanStack Query for real-time job polling, sklearn calibration curves |
+| **Frontend** | Vite + React 18 + TypeScript, Tailwind CSS v3 (tokens), shadcn/ui (Radix), Framer Motion, Recharts |
+| **Storage** | SQLite (analysis cache, instructor reviews) |
+| **Deployment** | Docker multi-stage build (Node + Python) |
+
+---
+
+## API
+
+### Async Analysis (recommended)
+
+```bash
+# Start a job
+curl -X POST http://127.0.0.1:8000/api/jobs \
+  -H "Content-Type: application/json" \
+  -d ‘{"url": "https://github.com/owner/repo"}’
+# → { "job_id": "abc123...", "status": "pending" }
+
+# Poll for result
+curl http://127.0.0.1:8000/api/jobs/abc123...
+# → { "job_id": "abc123", "status": "running", "stage": "parsing_history", "stage_index": 1, ... }
+# → (final) { "job_id": "abc123", "status": "done", "result": { "authors": [...], ... } }
+
+# Instructor Review
+curl -X POST http://127.0.0.1:8000/api/review \
+  -H "Content-Type: application/json" \
+  -d ‘{
+    "analysis_id": 42,
+    "author": "alice",
+    "instructor_role": "Major",
+    "reviewer": "prof@example.edu",
+    "note": "Confirmed; she led the redesign"
+  }’
+```
+
+### Health & Calibration
+
+```bash
+GET /health
+→ { "status": "ok", "version": "1.1.0" }
+
+GET /api/calibration?analysis_id=42
+→ { "regime": "cold-start", "n_reviews": 5, "ece": 0.12, ... }
+
+POST /api/calibration/train
+→ { "regime": "calibrated", "n": 50, "ece": 0.08 }
+```
+
+Full API reference: [ARCHITECTURE.md](ARCHITECTURE.md)

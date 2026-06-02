@@ -1,0 +1,24 @@
+services:
+  gitsight:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - GITSIGHT_HOST=0.0.0.0
+      - GITSIGHT_PORT=8000
+      - GITSIGHT_ALLOWED_ORIGINS=*
+      # Override in production:
+      # - GITSIGHT_ALLOWED_ORIGINS=https://your-domain.com
+      # - GITSIGHT_CLONE_DIR=/data/clones
+    volumes:
+      # Persist clone cache across restarts (optional — remove for ephemeral behaviour)
+      - clone_cache:/app/.cache/repo_clones
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  clone_cache:
